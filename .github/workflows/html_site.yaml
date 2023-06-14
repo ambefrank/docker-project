@@ -8,6 +8,7 @@ on:
 jobs:
   build-push-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 120
 
     steps:
       - name: Configure AWS credentials
@@ -45,7 +46,7 @@ jobs:
               sudo service docker start
               sudo systemctl enable docker
               sudo usermod -a -G docker ec2-user
-              docker info
+              sudo docker info
               docker stop latest || true
               docker rm latest || ture
               docker pull ambefrankline/github:latest
