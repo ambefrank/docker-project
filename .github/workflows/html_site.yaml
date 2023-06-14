@@ -40,7 +40,7 @@ jobs:
             username: ec2-user
             key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
             script: |
-               docker stop ambe || true
-               docker rm ambe || ture
+               docker stop latest || true
+               docker rm latest || ture
                docker pull ambefrankline/github:latest
-               docker run -d --name ambe -p 80:80 ambefrankline/github:latest
+               docker run -d --name latest -p 80:80 ambefrankline/github:latest
