@@ -46,8 +46,7 @@ jobs:
               sudo systemctl enable docker
               sudo usermod -a -G docker ec2-user
               docker info
-            script: |
-               docker stop latest || true
-               docker rm latest || ture
-               docker pull ambefrankline/github:latest
-               docker run -d --name latest -p 80:80 ambefrankline/github:latest
+              docker stop latest || true
+              docker rm latest || ture
+              docker pull ambefrankline/github:latest
+              docker run -d --name latest -p 80:80 ambefrankline/github:latest
