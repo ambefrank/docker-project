@@ -29,7 +29,7 @@ jobs:
       - name: build and push docker image
         uses: docker/build-push-action@v4
         with:
-            context: .
+            context: jupiter-website/
             push: true
             tags: ambefrankline/github:latest
 
