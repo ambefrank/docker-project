@@ -34,24 +34,31 @@ jobs:
             push: true
             tags: ambefrankline/github:latest
 
-  Deploy_docker_image_to_ec2:
-    runs-on: ubuntu-latest
-    name: ec2
-    steps:
-      - name: deploy docker image to ec2
-        uses: appleboy/ssh-action@master
+      - name: Start EC2 runner
+        uses: machulav/ec2-github-runner@v2
         with:
-            host: 3.94.109.167
-            username: ec2-user
-            key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-            script: |
-              sudo yum update -y
-              sudo amazon-linux-extras install docker -y
-              sudo service docker start
-              sudo systemctl enable docker
-              sudo usermod -a -G docker ec2-user
-              sudo docker info
-              sudo docker stop latest || true
-              sudo docker rm latest || ture
-              sudo docker pull ambefrankline/github:latest
-              sudo docker run -d --name latest -p 80:80 ambefrankline/github:latest
+            mode: start
+            github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+            ec2-image-id: ami-051559d22abfed129
+            ec2-instance-type: t2.micro
+            subnet-id: subnet-0e06ba2f413406ebd
+            security-group-id: sg-00d9ebf92a1750ffa
+
+  Deploy_docker_image_to_ec2__self_runner:
+    runs-on: self-hosted
+    name: ec2
+    needs:
+      - build-push-deploy
+    steps:
+      - name: deploy docker image to self hosted
+        run: |
+           sudo yum update -y
+           sudo amazon-linux-extras install docker -y
+           sudo service docker start
+           sudo systemctl enable docker
+           sudo usermod -a -G docker ec2-user
+           sudo docker info
+           sudo docker stop latest || true
+           sudo docker rm latest || ture
+           sudo docker pull ambefrankline/github:latest
+           sudo docker run -d --name latest -p 80:80 ambefrankline/github:latest
