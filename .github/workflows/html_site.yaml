@@ -44,4 +44,14 @@ jobs:
             host: 3.94.109.167
             username: ec2-user
             key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-            
+            script: |
+              sudo yum update -y
+              sudo amazon-linux-extras install docker -y
+              sudo service docker start
+              sudo systemctl enable docker
+              sudo usermod -a -G docker ec2-user
+              sudo docker info
+              sudo docker stop latest || true
+              sudo docker rm latest || ture
+              sudo docker pull ambefrankline/github:latest
+              sudo docker run -d --name latest -p 80:80 ambefrankline/github:latest
