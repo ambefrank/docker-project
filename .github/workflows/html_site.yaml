@@ -51,7 +51,7 @@ jobs:
               sudo systemctl enable docker
               sudo usermod -a -G docker ec2-user
               sudo docker info
-              docker stop latest || true
-              docker rm latest || ture
-              docker pull ambefrankline/github:latest
-              docker run -d --name latest -p 80:80 ambefrankline/github:latest
+              sudo docker stop latest || true
+              sudo docker rm latest || ture
+              sudo docker pull ambefrankline/github:latest
+              sudo docker run -d --name latest -p 80:80 ambefrankline/github:latest
