@@ -44,11 +44,4 @@ jobs:
             host: 3.94.109.167
             username: ec2-user
             key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-            run: |
-              sudo yum update -y
-              sudo amazon-linux-extras install docker -y
-              sudo service docker start
-              sudo systemctl enable docker
-              sudo usermod -a -G docker ec2-user
-              sudo docker info
-              
+            
