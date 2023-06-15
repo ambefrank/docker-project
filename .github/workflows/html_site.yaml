@@ -35,6 +35,7 @@ jobs:
             tags: ambefrankline/github:latest
 
       - name: Start EC2 runner
+        id: start-ec2-runner
         uses: machulav/ec2-github-runner@v2
         with:
             mode: start
@@ -43,6 +44,10 @@ jobs:
             ec2-instance-type: t2.micro
             subnet-id: subnet-0e06ba2f413406ebd
             security-group-id: sg-00d9ebf92a1750ffa
+
+    outputs:
+      label: ${{ steps.start-ec2-runner.outputs.label }}
+      ec2-instance-id: ${{ steps.start-ec2-runner.outputs.ec2-instance-id }}
 
   Deploy_docker_image_to_ec2__self_runner:
     runs-on: self-hosted
@@ -62,3 +67,20 @@ jobs:
            sudo docker rm latest || ture
            sudo docker pull ambefrankline/github:latest
            sudo docker run -d --name latest -p 80:80 ambefrankline/github:latest
+
+  Stop_EC2_runner:
+    name: stop self hosted ec2 runner
+    runs-on: ubuntu-latest
+    if: ${{ always() }}
+    needs:
+      - build-push-deploy
+      - Deploy_docker_image_to_ec2__self_runner
+    steps:
+      - name: stop self runner
+        uses: machulav/ec2-github-runner@v2
+        with:
+            mode: stop
+            github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+            label: ${{ needs.build-push-deploy.outputs.label }}
+            ec2-instance-id: ${{ needs.build-push-deploy.outputs.ec2-instance-id }}
+
