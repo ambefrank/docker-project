@@ -83,4 +83,5 @@ jobs:
             github-token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
             label: ${{ needs.build-push-deploy.outputs.label }}
             ec2-instance-id: ${{ needs.build-push-deploy.outputs.ec2-instance-id }}
+            aws-region: us-east-1
 
