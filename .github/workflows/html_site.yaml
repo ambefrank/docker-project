@@ -34,6 +34,10 @@ jobs:
             push: true
             tags: ambefrankline/github:latest
 
+  Deploy_docker_image_to_ec2:
+    runs-on: ubuntu-latest
+    name: ec2
+    steps:
       - name: deploy docker image to ec2
         uses: appleboy/ssh-action@master
         with:
